@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "274903698130",
+    "firebase_url": "https://jokes-generator.firebaseio.com",
+    "project_id": "jokes-generator",
+    "storage_bucket": "jokes-generator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274903698130:android:9f736eb9fc1e1319",
+        "android_client_info": {
+          "package_name": "com.udacity.gradle.builditbigger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274903698130-dju9p10kud7jj1avlhcrmnccaeh5ojfh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.gradle.builditbigger",
+            "certificate_hash": "9efeb270d62e6dec9e33c1b67d528f80e12a69dd"
+          }
+        },
+        {
+          "client_id": "274903698130-ouguencu8o1kdimlc7novvg82tej3fa7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2x6P3C7xdSGFk-VwJY0fAV_iIUmNCmR0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274903698130-ouguencu8o1kdimlc7novvg82tej3fa7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
