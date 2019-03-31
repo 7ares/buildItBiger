@@ -3,14 +3,17 @@ package com.udacity.gradle.builditbigger;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.jokesdisplayer.DisplayJokeActivity;
-//import com.example.jokesprovider.tellMeJoke;
 import com.example.jokesprovider.tellMeJoke;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -23,14 +26,25 @@ import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
-private String mGetJoke ;
-private MyBean myBean;
 
+    public static SimpleIdlingResource mIdlingResource;
+
+    @Nullable
+    @VisibleForTesting
+    public static IdlingResource getIdleResource() {
+        if (mIdlingResource == null)
+            mIdlingResource = new SimpleIdlingResource();
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // get idle resource instance for test
+        getIdleResource();
+
     }
 
 
@@ -57,13 +71,27 @@ private MyBean myBean;
     }
 
     public void tellJoke(View view) {
+
         new EndpointsAsyncTask().execute(new tellMeJoke().getJoke());
 
 
-     //   Toast.makeText(this, mGetJoke , Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(this, mGetJoke , Toast.LENGTH_SHORT).show();
     }
-    private class EndpointsAsyncTask extends AsyncTask<String, Void, String> {
+
+    public  class EndpointsAsyncTask  extends AsyncTask<String, Void, String> {
         private MyApi myApiService = null;
+        AsyncTaskListener mListener ;
+
+        public  EndpointsAsyncTask setListener(AsyncTaskListener listener){
+            this.mListener = listener ;
+            return this ;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // make test waite until background work finished
+            mIdlingResource.setIdleState(false);
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -90,11 +118,20 @@ private MyBean myBean;
 
         @Override
         protected void onPostExecute(String result) {
+// make test waite until background work finished
+            mIdlingResource.setIdleState(true);
+            if (mListener != null) this.mListener.onComplete(result);
+
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-            Intent displayJoke = new Intent(MainActivity.this , DisplayJokeActivity.class);
+            Intent displayJoke = new Intent(MainActivity.this, DisplayJokeActivity.class);
             displayJoke.putExtra("joke", result);
             startActivity(displayJoke);
         }
+
     }
 
+    public static interface AsyncTaskListener {
+        public String onComplete(String result);
+
+    }
 }
